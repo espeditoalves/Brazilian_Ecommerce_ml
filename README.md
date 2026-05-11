@@ -41,33 +41,95 @@ Esquema dos dados:
 
 ## 1.2. Configuração do Ambiente Local
 
-Para trabalhar neste projeto, utilizaremos o **Poetry** para gerenciamento de dependências.
+Para trabalhar neste projeto, utilizaremos um **ambiente virtual Python (.venv)** para gerenciamento de dependências.
 
-### 1.2.1. Configurando o Poetry
+### 1.2.1. Configurando o Ambiente Virtual (.venv)
 
-O arquivo **`pyproject.toml`** já está definido no repositório. Para instalar as dependências e o pacote local `src`, siga os passos:
+O arquivo **`requirements.txt`** já está definido no repositório com todas as dependências necessárias. Para configurar o ambiente, siga os passos:
 
-1. **Instalar dependências com Poetry:**
+1. **Criar o ambiente virtual:**
 
    ```bash
-   poetry install
+   python -m venv .venv
    ```
-
-   Isso instalará todas as bibliotecas necessárias e configurará o módulo `src` para uso.
 
 2. **Ativar o ambiente virtual:**
 
+   **No Windows (PowerShell):**
    ```bash
-   poetry shell
+   .venv\Scripts\Activate.ps1
    ```
 
-3. **Configurar o Kernel do Jupyter (opcional):**
+   **No Windows (CMD):**
+   ```bash
+   .venv\Scripts\activate.bat
+   ```
+
+   **No macOS/Linux:**
+   ```bash
+   source .venv/bin/activate
+   ```
+
+3. **Instalar as dependências:**
+
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+   Isso instalará todas as bibliotecas necessárias para o projeto.
+
+4. **Configurar o Kernel do Jupyter (opcional):**
 
    ```bash
    python -m ipykernel install --user --name=brazilian_e_commerce --display-name "Python (brazilian_e_commerce)"
    ```
 
    Com isso, você poderá selecionar este kernel nos seus notebooks do Jupyter ou VSCode.
+
+### 1.2.2. Gerenciando Pacotes
+
+Após ativar o ambiente virtual, você pode gerenciar pacotes usando `pip`:
+
+**Adicionar um novo pacote:**
+
+```bash
+pip install nome_do_pacote
+```
+
+Exemplo:
+```bash
+pip install requests
+```
+
+**Adicionar pacote com versão específica:**
+
+```bash
+pip install nome_do_pacote==versao
+```
+
+Exemplo:
+```bash
+pip install numpy==1.24.0
+```
+
+**Remover um pacote:**
+
+```bash
+pip uninstall nome_do_pacote
+```
+
+Exemplo:
+```bash
+pip uninstall requests
+```
+
+**Atualizar o requirements.txt com novos pacotes:**
+
+Após instalar novos pacotes, atualize o arquivo `requirements.txt`:
+
+```bash
+pip freeze > requirements.txt
+```
 
 ## 1.3. Estrutura do Projeto
 
