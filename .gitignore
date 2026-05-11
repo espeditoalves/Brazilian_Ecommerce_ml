@@ -97,7 +97,8 @@ data/interim/*
 !data/**/.gitkeep
 
 # Models
-models/
+models/*
+!models/.gitkeep
 *.pkl
 *.joblib
 *.h5
