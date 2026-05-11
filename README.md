@@ -11,7 +11,7 @@
     - [1.4.1. Makefile (Automação de Tarefas)](#141-makefile-automação-de-tarefas)
     - [1.4.2. Pre-commit (Padronização e Linting)](#142-pre-commit-padronização-e-linting)
     - [1.4.3. Testes Unitários (`pytest`)](#143-testes-unitários-pytest)
-    - [1.4.4. Documentação Automática (`pdoc`)](#144-documentação-automática-pdoc)
+    - [1.4.4. Documentação Automática (MkDocs + mkdocstrings)](#144-documentação-automática-mkdocs--mkdocstrings)
 
 Este projeto tem o objetivo de realizar uma análise exploratória com esse conjunto de dados públicos de E-commerce Brasileiro.
 As análises e modelagens de dados serão realizadas utilizando Python e bibliotecas como `Pandas`, `Matplotlib` e `Scikit-Learn`.
@@ -136,27 +136,27 @@ pip freeze > requirements.txt
 ```text
 brazilian_e-commerce_project/
 ├── data/
-│   ├── external/       # Dados de fontes externas (APIs, web scraping, etc)
-│   ├── interim/        # Dados transformados intermediários
-│   ├── processed/      # Conjuntos de dados finais para modelagem
-│   └── raw/            # Dados originais, imutáveis (dump do SQL/CSV original)
-├── docs/               # Documentação do projeto e referências do dataset
-├── models/             # Modelos treinados serializados (.pkl, .joblib, .onnx)
-├── notebooks/          # Experimentos e análises (Jupyter Notebooks)
-│   ├── 00_eda/         # Exploratory Data Analysis
-│   ├── 01_version/     # version 1 de modelagem
-│   └── 02_version/     # version 2 de modelagem
-├── src/                # Código fonte modular e reutilizável
+│   ├── interim/                  # Dados transformados intermediários
+│   ├── processed/                # Conjuntos de dados finais para modelagem
+│   └── raw/                      # Dados originais, imutáveis (CSV original)
+├── docs/                         # Fonte da documentação MkDocs (.md)
+│   ├── api/                      # Referência da API (gerada por mkdocstrings)
+│   └── index.md                  # Página inicial da documentação
+├── models/                       # Modelos treinados serializados (.pkl, .joblib)
+├── notebooks/                    # Experimentos e análises (Jupyter Notebooks)
+│   ├── 00_data extraction/       # Extração e download dos dados
+│   ├── 01_eda/                   # Análise Exploratória de Dados
+│   ├── 02_feature_engineering/   # Engenharia de Atributos
+│   └── 03_modelagem/             # Modelagem e Validação de ML
+├── src/                          # Código fonte modular e reutilizável
 │   ├── __init__.py
-│   ├── data/           # Scripts para baixar ou gerar dados (Ingestão)
-│   ├── features/       # Scripts para transformar dados brutos em features
-│   ├── models/         # Scripts para treinar modelos e fazer predições
-│   └── visualization/  # Scripts para criar visualizações consistentes
-├── tests/              # Testes unitários para o código em src/
-├── config/             # Arquivos de configuração (YAML, .env)
+│   ├── data/                     # Scripts para baixar ou gerar dados
+│   └── utils.py                  # Funções utilitárias
+├── tests/                        # Testes unitários para o código em src/
 ├── .gitignore
-├── Makefile            # Automação de tarefas (run_eda, train_model, etc)
-├── pyproject.toml      # Gerenciamento de dependências (Poetry)
+├── Makefile                      # Automação de tarefas
+├── mkdocs.yml                    # Configuração do MkDocs
+├── requirements.txt              # Dependências do projeto
 └── README.md
 ```
 
@@ -164,15 +164,17 @@ brazilian_e-commerce_project/
 
 Atualmente, o projeto conta com os seguintes notebooks principais organizados por etapa:
 
-- **`notebooks/00_eda/`**:
-  - `01_exploracao.ipynb`: Análise exploratória inicial dos dados.
-  - `analise_exploratoria.ipynb`: Notebook com visualizações detalhadas e descoberta de padrões no dataset de E-commerce.
+- **`notebooks/00_data extraction/`**:
+  - `1.0_data extraction.ipynb`: Download e extração dos dados brutos do Kaggle.
 
-- **`notebooks/01_version/`**:
-  - `0_data_prep_db.ipynb`: Notebook utilizado para o processo de preparação e limpeza de dados para modelagem (versão inicial).
+- **`notebooks/01_eda/`**:
+  - `1.0_analise_exploratoria.ipynb`: Análise Exploratória automatizada de todos os datasets.
 
-- **`notebooks/02_version/`**:
-  - *(Reservado para futuras iterações e melhorias de modelagem).*
+- **`notebooks/02_feature_engineering/`**:
+  - `1.0_feature_engineering.ipynb`: Consolidação, tratamento e criação de features para modelagem.
+
+- **`notebooks/03_modelagem/`**:
+  - `1.0_modelagem_validacao.ipynb`: Treinamento e validação de modelo de ML (baseline Random Forest).
 
 ## 1.4. Ferramentas de Qualidade e Automação
 
@@ -194,7 +196,7 @@ Foi configurado o **pre-commit** junto com o formatador **Ruff**. Sempre que voc
 Para ativar o pre-commit no repositório local, execute o comando uma única vez:
 
 ```bash
-poetry run pre-commit install
+pre-commit install
 ```
 
 ### 1.4.3. Testes Unitários (`pytest`)
@@ -210,12 +212,43 @@ O arquivo **`pytest.ini`** na raiz do projeto concentra as configurações base 
 - Definir a pasta padrão de testes (`testpaths = tests`), garantindo que o pytest encontre os testes automaticamente.
 - Especificar opções de formatação do output (`addopts = -ra -q`), para uma saída de erros mais clara e compacta no terminal.
 
-### 1.4.4. Documentação Automática (`pdoc`)
+### 1.4.4. Documentação Automática (MkDocs + mkdocstrings)
 
-Para gerar e visualizar a documentação automática do código-fonte (baseada nas docstrings das suas funções na pasta `src/`), utilize o atalho:
+A documentação do projeto utiliza **MkDocs** com o tema **Material** e o plugin **mkdocstrings** para gerar referência da API automaticamente a partir das docstrings do código-fonte.
+
+**Visualizar a documentação localmente (live reload):**
 
 ```bash
-make docs
+# No Windows (PowerShell, com o .venv ativado):
+mkdocs serve
 ```
 
-A documentação será gerada em HTML dentro da pasta `docs/`.
+Acesse `http://127.0.0.1:8000` no navegador. As alterações nos arquivos `.md` ou nas docstrings do `src/` são refletidas em tempo real.
+
+**Gerar o site estático da documentação:**
+
+```bash
+mkdocs build
+```
+
+O site será gerado na pasta `site/`. Essa pasta é ignorada pelo Git.
+
+**Estrutura da documentação (editável):**
+
+```text
+docs/
+├── index.md          # Página inicial
+└── api/
+    ├── utils.md      # Referência automática de src.utils
+    └── data.md       # Referência automática de src.data.raw
+```
+
+Para adicionar a documentação de um novo módulo, crie um arquivo `.md` em `docs/api/` com o conteúdo:
+
+```markdown
+# Nome do Módulo
+
+::: src.nome_do_modulo
+```
+
+E adicione o arquivo no `nav` do `mkdocs.yml`.

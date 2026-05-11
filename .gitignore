@@ -107,3 +107,6 @@ models/*
 
 # Dependency managers
 poetry.lock
+
+# MkDocs build output
+site/

@@ -1,0 +1,30 @@
+site_name: "Brazilian E-commerce ML"
+site_description: "Documentação do projeto de Machine Learning para e-commerce brasileiro"
+site_author: "Espedito"
+
+theme:
+  name: material
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - toc.integrate
+    - search.suggest
+    - search.highlight
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [.]
+          options:
+            docstring_style: google
+            show_root_heading: true
+            show_source: true
+            heading_level: 2
+
+nav:
+  - Home: index.md
+  - Referência da API:
+    - utils: api/utils.md
+    - data: api/data.md
