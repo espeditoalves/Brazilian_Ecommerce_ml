@@ -9,8 +9,7 @@ __pycache__/
 .Python
 env/
 .venv
-build/
-develop-eggs/
+build/develop-eggs/
 dist/
 downloads/
 eggs/
@@ -26,8 +25,6 @@ var/
 venv
 
 # PyInstaller
-#  Usually these files are written by a python script from a template
-#  before PyInstaller builds the exe, so as to inject date/other infos into it.
 *.manifest
 *.spec
 
@@ -93,9 +90,19 @@ target/
 outputs
 
 # Data
-data/**/*.csv
+data/raw/*
+data/processed/*
+data/final/*
+data/interim/*
+!data/**/.gitkeep
 
-# Notebooks
-# notebooks/*
+# Models
+models/
+*.pkl
+*.joblib
+*.h5
+*.pb
+*.onnx
 
+# Dependency managers
 poetry.lock
